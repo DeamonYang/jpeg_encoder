@@ -1,0 +1,9 @@
+*.log
+*.bak
+*.swp
+*.rc
+simv*
+*.key
+verdiLog
+csrc
+*.fsdb
