@@ -80,9 +80,10 @@ module encode_tb;
 	
 	endtask
 	
-	
+	reg[31:0]		pic_cnt;	
 	always@(posedge clk_x8_i or negedge rst_n_i)
 	if(!rst_n_i)begin
+		pic_cnt <= 'd0;
 		sv_fp = $fopen("sv_data_encode.jpg","wb");
 		for(int i = 0;i < 328;i ++)begin
 			$fwrite(sv_fp,"%c",peg_header[i]);
@@ -90,20 +91,26 @@ module encode_tb;
 	end else if(pic_encode_valid_o)begin
 		$display("%h",pic_encode_seq_o);
 		$fwrite(sv_fp,"%c",pic_encode_seq_o[31:24]);
-		if(pic_encode_seq_o[31:24] == 8'hff)
-			$fwrite(sv_fp,"%c",8'h00);
-
 		$fwrite(sv_fp,"%c",pic_encode_seq_o[23:16]);
-		if(pic_encode_seq_o[23:16] == 8'hff)
-			$fwrite(sv_fp,"%c",8'h00);
-		
 		$fwrite(sv_fp,"%c",pic_encode_seq_o[15:8]);
-		if(pic_encode_seq_o[15:8] == 8'hff)
-			$fwrite(sv_fp,"%c",8'h00);
-	
 		$fwrite(sv_fp,"%c",pic_encode_seq_o[7:0]);
-		if(pic_encode_seq_o[7:0] == 8'hff)
-			$fwrite(sv_fp,"%c",8'h00);
+		pic_cnt <= pic_cnt + 1'b1;
+		
+//		$fwrite(sv_fp,"%c",pic_encode_seq_o[31:24]);
+//		if(pic_encode_seq_o[31:24] == 8'hff)
+//			$fwrite(sv_fp,"%c",8'h00);
+//
+//		$fwrite(sv_fp,"%c",pic_encode_seq_o[23:16]);
+//		if(pic_encode_seq_o[23:16] == 8'hff)
+//			$fwrite(sv_fp,"%c",8'h00);
+//		
+//		$fwrite(sv_fp,"%c",pic_encode_seq_o[15:8]);
+//		if(pic_encode_seq_o[15:8] == 8'hff)
+//			$fwrite(sv_fp,"%c",8'h00);
+//	
+//		$fwrite(sv_fp,"%c",pic_encode_seq_o[7:0]);
+//		if(pic_encode_seq_o[7:0] == 8'hff)
+//			$fwrite(sv_fp,"%c",8'h00);
 	end	
 	
 	

@@ -30,6 +30,7 @@ module encode #(
 	parameter RLE_PIX_OUT_WIDTH 	= 20;
 	parameter AC_PIX_OUT_WIDTH		= 32;
 	parameter ASS_OUT_WIDTH			= 32;
+	parameter EXT_IN_WIDTH			= 32;
 	
 
 	wire[DCT_PIX_OUT_WIDTH*8 - 1:0]	wv_dct_data_out;
@@ -67,6 +68,8 @@ module encode #(
 	wire							w_seq_last;
 	wire[ASS_OUT_WIDTH-1:0]			w_seq_left;
 
+	wire[EXT_IN_WIDTH-1:0]			wv_extend_out;
+	wire							w_extend_done;
 
 	dct8x8#(
 		.PIXEL_WIDTH 	(PIC_PIX_IN_WIDTH),
@@ -197,9 +200,24 @@ module encode #(
 		.seq_left_o		(w_seq_left		)
 	);
 
-	assign pic_encode_seq_o = wv_seq_out;
-	assign pic_encode_valid_o = w_seq_valid;
+	encode_extend#(
+		.PIC_PIX_IN_WIDTH(EXT_IN_WIDTH)
+	)encode_extend_u0(
+		.rst_n_i(rst_n_i),
+		.clk_x8_i(clk_x8_i),
+		.pic_data_in_i(wv_seq_out),
+		.pic_data_in_valid_i(w_seq_valid),
+		.pic_data_out_o(wv_extend_out),
+		.pic_data_out_valid_o(w_extend_done)
+	);
+
+
+	assign pic_encode_seq_o = wv_extend_out;
+	assign pic_encode_valid_o = w_extend_done;
 	
+//	assign pic_encode_seq_o = wv_seq_out;
+//	assign pic_encode_valid_o = w_seq_valid;
+
 endmodule
 
 

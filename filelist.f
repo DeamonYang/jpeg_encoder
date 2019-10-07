@@ -13,5 +13,8 @@
 ./rtl/ac_assemble.sv
 ./rtl/encode_huff.sv 
 ./rtl/encode.sv
+./rtl/encode_extend.sv 
+
 
 ./testbench/encode_tb.sv
+
