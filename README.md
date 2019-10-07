@@ -5,3 +5,4 @@ pic_data_gray.data
 需要在testbench/encode_tb.sv 指定图片大小
 运行：
 make
+编码器性能 1pixel/cycle
